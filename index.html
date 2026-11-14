@@ -65,12 +65,41 @@
 </head>
 <body>
   <a class="widget" href="https://danceknightprime.blogspot.com/p/the-outside-mind.html" target="_blank" rel="noopener">
-    <video autoplay muted loop playsinline>
+    <video 
+      id="vid"
+      autoplay 
+      muted 
+      loop 
+      playsinline 
+      webkit-playsinline
+      preload="auto">
       <source src="https://raw.githubusercontent.com/danceknightxd/outsidemind/main/generated_video_clean.mp4" type="video/mp4">
     </video>
     <div class="title">THE OUTSIDE MIND</div>
     <div class="btn">CLICK HERE</div>
   </a>
+
+  <script>
+    // Force play on iOS
+    document.addEventListener('DOMContentLoaded', function() {
+      var video = document.getElementById('vid');
+      if (video) {
+        video.muted = true;
+        video.playsInline = true;
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        
+        var playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(function() {
+            // If autoplay blocked, try again on first user interaction
+            document.body.addEventListener('touchstart', function() {
+              video.play();
+            }, { once: true });
+          });
+        }
+      }
+    });
+  </script>
 </body>
 </html>
-
